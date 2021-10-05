@@ -1,17 +1,33 @@
-import React from 'react'
-export default function Todo ({ title, description, dateCreated, complete, dateCompleted }) {
+import React,{useState} from 'react'
+import TodoList from './TodoList';
+export default function Todo ({ title, description, dateCreated, complete, dateCompleted, id, dispatchTodo}) {
 
+function handleComplete(){
+  const date = new Date().toLocaleDateString();
+  const time = new Date().toLocaleTimeString();
+  let dComplete = `${date} ${time}`;
+  if (complete) dComplete = ''
+  dispatchTodo({type: 'TOGGLE_TODO', id, dComplete})
+}
+
+function handleDelete(){
+  dispatchTodo({type: 'DELETE_TODO', id})
+}
     return (
     <div>
-        <h3>{title}</h3>
-        <div>{description}</div>
+        <h3>Todo: {title}</h3>
+        <div>Description: {description}</div>
         <br />
-        <div>{dateCreated}</div>
+        <div>Date Created: {dateCreated}</div>
         <br/>
-        <div>{complete}<label><input type="checkbox"/>Yes Or No?</label>
+        <div>Have you completed: {complete}<label><input type="checkbox" value ={complete} onChange={handleComplete} />Yes Or No?</label>
+        </div>
+        <div>
+        <br/>
+        <button onClick={handleDelete}>Delete</button>
         </div>
         <br/>
-        <div>{dateCompleted}</div>
+        <div>Date Completed: {dateCompleted}</div>
         {/* <i>Written by <b>{author}</b></i> */}
         </div>  
               )
