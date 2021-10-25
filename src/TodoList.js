@@ -1,10 +1,16 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import Todo from './Todo'
 
-export default function TodoList ({todos, dispatchTodo}) {
+import { StateContext } from './Contexts'
+
+export default function TodoList () {
+
+    const {state} =useContext(StateContext)
+    const{todos} = state;
+
     return (
     <div>
-        {todos.map((p, i) => <Todo  key={'todo-' + i} {...p} title={p.title} description={p.description} dateCreated={p.dateCreated} complete={p.complete} dateCompleted={p.dateCompleted} id={p.id} dispatchTodo={dispatchTodo} />)}
+        {todos.map((p, i) => <Todo  key={'todo-' + i} {...p} title={p.title} description={p.description} dateCreated={p.dateCreated} complete={p.complete} dateCompleted={p.dateCompleted} id={p.id} />)}
         </div>
          )
         }

@@ -1,0 +1,42 @@
+{
+  "todos": [
+    {
+      "title": "test",
+      "description": "test",
+      "id": 1,
+      "complete": false,
+      "dateCompleted": null
+    },
+    {
+      "title": "test2",
+      "description": "test2",
+      "id": 2,
+      "complete": false,
+      "dateCompleted": null
+    }
+  ],
+  "users": [
+    {
+      "username": "testuser",
+      "password": "1234",
+      "id": 1
+    }
+  ],
+  "themes": [
+    {
+      "id": 1,
+      "primaryColor": "deepskyblue",
+      "secondaryColor": "coral"
+    },
+    {
+      "id": 2,
+      "primaryColor": "orchid",
+      "secondaryColor": "mediumseagreen"
+    },
+    {
+      "id": 3,
+      "primaryColor": "darkslategray",
+      "secondaryColor": "slategray"
+    }
+  ]
+}

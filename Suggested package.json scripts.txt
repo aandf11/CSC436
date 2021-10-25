@@ -1,0 +1,5 @@
+Adding/modifying the following run scripts in package.json may make it easier to use json-server in conjunction with React:
+
+    "start:client": "react-scripts start",
+    "start:server": "npx json-server --watch server/db.json --port 4000 --routes server/routes.json",
+    "start": "concurrently \"npm run start:server\" \"npm run start:client\"",
