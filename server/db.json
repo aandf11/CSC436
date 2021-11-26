@@ -13,6 +13,16 @@
       "id": 2,
       "complete": false,
       "dateCompleted": null
+    },
+    {
+      "title": "Taking out the trash",
+      "description": "I will have to take out the trash by tonight. I will have to take out the trash by tonight. I will have to take out the trash by tonight.\n",
+      "id": 4
+    },
+    {
+      "title": "new test test",
+      "description": "tests tsetse test tsetse tset tset",
+      "id": 5
     }
   ],
   "users": [
@@ -20,6 +30,16 @@
       "username": "testuser",
       "password": "1234",
       "id": 1
+    },
+    {
+      "username": "kfung4",
+      "password": "1234",
+      "id": 2
+    },
+    {
+      "username": "aidenfung1994",
+      "password": "1234",
+      "id": 3
     }
   ],
   "themes": [

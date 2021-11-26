@@ -3,14 +3,22 @@
 import UserBar from './UserBar'
 import {useState, useReducer, useEffect} from 'react'
 import { useResource } from 'react-request-hook'
+import{mount, route} from 'navi';
+import {Router, View} from 'react-navi';
 //import Todo from './Todo'
 import React from 'react'
 import CreateTodo from './CreateTodo'
+import TodoPage from './pages/TodoPage'
 import TodoList from './TodoList'
 import Header from './Header'
 import {ThemeContext,StateContext} from './Contexts'
 import ChangeTheme from './ChangeTheme'
 import appReducer from './reducers'
+import HeaderBar from './pages/HeaderBar'
+import HomePage from './pages/HomePage'
+import UsersPage from './pages/UserPage';
+import ProfilePage from './pages/ProfilePage';
+import { Container } from 'react-bootstrap';
 //export const ThemeContext = React.createContext({primary: 'blue'})
 
 function App() {
@@ -48,20 +56,20 @@ function App() {
   //   },
   // ]
 
-  const [ todos, getTodos ] = useResource(() => ({
-    url: '/todos',
-    method: 'get'
-}))
+//   const [ todos, getTodos ] = useResource(() => ({
+//     url: '/todos',
+//     method: 'get'
+// }))
 
-const [state, dispatch] =useReducer(appReducer,{user: '', todos: []})
+const [state, dispatch] =useReducer(appReducer,{user: {}, todos: [], users: []})
 
-useEffect(getTodos, [])
+// useEffect(getTodos, [])
 
-useEffect(() => {
-    if (todos && todos.data) {
-        dispatch({ type: 'FETCH_TODOS', todos: todos.data })
-    }
-}, [todos])
+// useEffect(() => {
+//     if (todos && todos.data) {
+//         dispatch({ type: 'FETCH_TODOS', todos: todos.data })
+//     }
+// }, [todos])
 
 
  // const [todos, setTodos] = useState(initialTodos)
@@ -117,20 +125,30 @@ useEffect(() => {
   //            return state
   //           }
   //         }      
+  const routes = mount({
+    '/': route({ view: <HomePage /> }),
+    '/todo/create':route({ view: <CreateTodo /> }),
+    '/users': route({ view: <UsersPage />}),
+    '/users/:id': route(req => {
+      return { view: <ProfilePage id={req.params.id} /> }
+    }),
+    '/todo/:id': route(req => {
+        return { view: <TodoPage id={req.params.id} /> }
+    }),
+})
 
 
   return(
     <div>
   <ThemeContext.Provider value={theme}>
     <StateContext.Provider value = {{state: state, dispatch: dispatch }}>
-      <Header text = "My Todo" />
-      <ChangeTheme theme={theme} setTheme={setTheme} />
-      {/* <UserBar user={user} dispatch={dispatch} /> */}
-    <UserBar/>
-    <br/><br/><hr/><br/>
-    { user && <CreateTodo />}
-    <br/><br/><hr/><br/>
-    <TodoList />
+    <Router routes={routes}>
+      <Container>
+                <HeaderBar setTheme={setTheme} />
+                <hr />
+                <View/>
+      </Container>
+ </Router>
     </StateContext.Provider>
     </ThemeContext.Provider>
   </div>

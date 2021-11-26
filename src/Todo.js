@@ -1,21 +1,36 @@
 import React,{useState, useContext, useEffect} from 'react'
 import TodoList from './TodoList';
+import {Link} from 'react-navi'
+import {Card, Button} from 'react-bootstrap'
 import { useResource } from 'react-request-hook';
 import { ThemeContext , StateContext} from './Contexts';
 
-export default function Todo ({ title, description, dateCreated, complete, dateCompleted, id}) {
+function Todo ({ title, description, dateCreated, complete, dateCompleted, _id, short=false}) {
 
-const [todo , deleteTodo ] = useResource(({id}) => ({
-    url: `/todos/${id}`,
+  const {state, dispatch} = useContext(StateContext)
+  const {user} = state
+
+const [todoToDel , deleteTodo ] = useResource(({_id}) => ({
+    url: `/todos/${_id}`,
     method: 'delete',
+    headers: { "Authorization": `${user.access_token}`}
 }))
 
 
-const [updateTodos , updateTodo ] = useResource(({id, complete, dateCompleted}) => ({
-  url: `/todos/${id}`,
+const [updateTodos , updateTodo ] = useResource(({_id, complete, dateCompleted}) => ({
+  url: `/todos/${_id}`,
   method: 'patch',
+  headers: { "Authorization": `${user.access_token}`},
   data: {complete, dateCompleted}
 }))
+
+let processedDescription = description
+if (short) {
+  if (description.length > 30) {
+    processedDescription = description.substring(0, 30) + '...'
+  }
+}
+
 
 
 const handleCompleted = () => {
@@ -25,7 +40,7 @@ const handleCompleted = () => {
   if (complete === true) {
     dComplete = null;
   }
-  updateTodo({id: id, complete: !complete, dateCompleted: dComplete});
+  updateTodo({id: _id, complete: !complete, dateCompleted: dComplete});
 }
 
 useEffect(() => {
@@ -65,7 +80,7 @@ function handleComplete(){
   const time = new Date().toLocaleTimeString();
   let dComplete = `${date} ${time}`;
   if (complete) dComplete = ''
-  dispatch({type: 'TOGGLE_TODO', id, dComplete})
+  dispatch({type: 'TOGGLE_TODO', _id, dComplete})
 }
 
 // function handleDelete(){
@@ -73,33 +88,63 @@ function handleComplete(){
 // }
 
 const handleDelete = () => {
-  console.log(id);
-  deleteTodo({id: id});
-  dispatch({type:'DELETE_TODO', id});
+  // console.log(id);
+  // deleteTodo({id: id});
+  // dispatch({type:'DELETE_TODO', id});
+  deleteTodo()
 }
+
+useEffect(() => {
+  if (todoToDel && todoToDel.isLoading === false && todoToDel.data) {
+      dispatch({type: "DELETE_TODO", todoId: _id})
+  }
+}, [todoToDel])
 
 
 const {secondaryColor} =  useContext(ThemeContext)
-const {dispatch} = useContext(StateContext)
+//const {dispatch} = useContext(StateContext)
 
 
 
     return (
-    <div>
-        <h3 style={{ color: secondaryColor }}>Todo: {title}</h3>
-        <div>Description: {description}</div>
-        <br />
-        <div>Date Created: {dateCreated}</div>
-        <br/>
-        <div>Have you completed: {complete}<label><input type="checkbox" value ={complete} onChange={handleCompleted} />Yes Or No?</label>
-        </div>
-        <div>
-        <br/>
-        <button onClick={handleDelete}>Delete</button>
-        </div>
-        <br/>
-        <div>Date Completed: {dateCompleted}</div>
-        {/* <i>Written by <b>{author}</b></i> */}
-        </div>  
+    // <div>
+    //      <Link href={`/todo/${id}`}><h3 style={{color: secondaryColor}}>{title}</h3></Link>
+    //     <div>Description: {processedDescription}</div>
+    //     <br />
+    //     <div>Date Created: {dateCreated}</div>
+    //     <br/>
+    //     <div>Have you completed: {complete}<label><input type="checkbox" value ={complete} onChange={handleCompleted} />Yes Or No?</label>
+    //     </div>
+    //     <div>
+    //     <br/>
+    //     <button onClick={handleDelete}>Delete</button>
+    //     </div>
+    //     <br/>
+    //     <div>Date Completed: {dateCompleted}</div>
+    //     {short &&
+    //             <div>
+    //                 <br />
+    //                 <Link href={`/todo/${id}`}>View full todo</Link>
+    //             </div>
+    //         }
+
+    //     {/* <i>Written by <b>{author}</b></i> */}
+    //     </div>  
+
+
+<Card>
+<Card.Body>
+<Link href={`/todo/${_id}`}><h3 style={{color: secondaryColor}}>{title}</h3></Link>
+    <Card.Title><input type="checkbox" checked={dateCompleted} onChange={handleCompleted} /> Have you completed?</Card.Title>
+    <Card.Text>Description: {processedDescription}</Card.Text>
+    <p>Date created: {dateCreated}</p>
+    {dateCompleted && <label>Date completed: {new Date(dateCompleted).toLocaleDateString('en-us')}</label>}
+    {dateCompleted && <br/>}
+    <Button onClick={handleDelete}>Delete</Button>
+    <br/><br/>
+</Card.Body>
+</Card>
               )
             }
+
+            export default React.memo(Todo)
