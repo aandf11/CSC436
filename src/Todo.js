@@ -43,12 +43,20 @@ const handleCompleted = () => {
   updateTodo({id: _id, complete: !complete, dateCompleted: dComplete});
 }
 
+// useEffect(() => {
+//   if (updateTodos && updateTodos.data) {
+//     dispatch({type: 'TOGGLE_TODO', id: updateTodos.data._id, complete: updateTodos.data.complete, dateCompleted: updateTodos.data.dateCompleted})
+//   }
+// }, [updateTodos])
+
+
 useEffect(() => {
-  if (updateTodos && updateTodos.data) {
-    dispatch({type: 'TOGGLE_TODO', id: updateTodos.data.id, complete: updateTodos.data.complete, dateCompleted: updateTodos.data.dateCompleted})
+  if (updateTodos && updateTodos.isLoading === false && updateTodos.data) {
+      console.log("Data")
+      console.log(updateTodos.data.todo)
+      dispatch({type: "TOGGLE_TODO", complete: !complete, todoId: _id, dateCompleted: Date.now()})
   }
 }, [updateTodos])
-
 
 // const [toggleTodo, toggleTodoFunction] = useResource(
 //   (id, updatedComplete, updateDateCompleted) => ({
@@ -87,10 +95,14 @@ function handleComplete(){
 //   dispatch({type: 'DELETE_TODO', id})
 // }
 
-const handleDelete = () => {
-  // console.log(id);
-  // deleteTodo({id: id});
-  // dispatch({type:'DELETE_TODO', id});
+// const handleDelete = () => {
+//   // console.log(id);
+//   // deleteTodo({id: id});
+//   // dispatch({type:'DELETE_TODO', id});
+//   deleteTodo()
+// }
+
+function handleDelete() {
   deleteTodo()
 }
 

@@ -26,11 +26,11 @@ export default function CreateTodo () {
     // }))
  
 
-        const [todo , createTodo ] = useResource(({ title, description, dateCreated, dateCompleted, author }) => ({
+        const [todo , createTodo ] = useResource(({ title, description, dateCreated,complete, dateCompleted, author }) => ({
                 url: '/todo',
                 method: 'post',
                 headers: {"Authorization": `${state.user.access_token}`},
-                data: { title, description, dateCreated,dateCompleted, author }
+                data: { title, description, dateCreated,complete, dateCompleted, author }
             }))
         
 
@@ -52,6 +52,7 @@ export default function CreateTodo () {
     // const complete = false;
      const dateCreated = Date(Date.now())
      const dateCompleted = undefined
+     const complete = false;
     // const dateCompleted = undefined
     //    function handleCreate () {
     //             createTodo({ title, description, dateCreated, complete, dateCompleted, author: user.username })
@@ -61,7 +62,7 @@ export default function CreateTodo () {
 
 
         function handleCreate () {
-                    createTodo({ title, description, dateCreated, dateCompleted, author: user.username })
+                    createTodo({ title, description, dateCreated,complete, dateCompleted, author: user.username })
                 }
 //     useEffect(() => {
 //         if (todo && todo.data && todo.isLoading === false) {
@@ -82,7 +83,7 @@ export default function CreateTodo () {
     
         useEffect(() => {
                 if (todo && todo.data) {
-                    dispatch({ type: 'CREATE_TODO', title: todo.data.title, description: todo.data.description, dateCreated: todo.data.dateCreated, dateCompleted: todo.data.dateCompleted, todoId: todo.data._id, author: user.username })
+                    dispatch({ type: 'CREATE_TODO', title: todo.data.title, description: todo.data.description, dateCreated: todo.data.dateCreated,complete:todo.data.complete, dateCompleted: todo.data.dateCompleted, todoId: todo.data._id, author: user.username })
                     console.log(todo.data)
                     navigation.navigate(`/todo/${todo.data._id}`)
                 }

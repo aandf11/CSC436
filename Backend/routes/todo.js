@@ -90,7 +90,7 @@ router.post('/', async function (req, res) {
     "title": req.body.title,
     "description": req.body.description,
     "dateCreated" : req.body.dateCreated,
-   // "complete" : req.body.complete,
+    "complete" : req.body.complete,
     "dateCompleted" : req.body.dateCompleted,
     "author": req.payload.id
     })
@@ -110,7 +110,7 @@ router.post('/', async function (req, res) {
             "title": savedTodo.title,
             "description": savedTodo.description,
             "dateCreated" : savedTodo.dateCreated,
-           // "complete" : savedTodo.complete,
+            "complete" : savedTodo.complete,
             "dateCompleted" : savedTodo.dateCompleted,
             "author": savedTodo.author
         })
